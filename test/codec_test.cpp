@@ -49,6 +49,18 @@ TEST(CodecTest, PutAndGetStringListLE) {
   }
 }
 
+TEST(CodecTest, LargeStringOverflow) {
+  ByteBuf buf;
+  std::string large_string(300, 'a');  // Length > 255
+  EXPECT_THROW(codec::write_string_le<uint8_t>(buf, large_string), std::overflow_error);
+}
+
+TEST(CodecTest, LargeListOverflow) {
+  ByteBuf buf;
+  std::vector<std::string> large_list(300, "test");
+  EXPECT_THROW((codec::write_string_list_le<uint8_t, uint8_t>(buf, large_list)), std::overflow_error);
+}
+
 TEST(JoinVectorTest, IntVector) {
   std::vector<int> nums = {1, 2, 3};
   EXPECT_EQ("[1, 2, 3]", codec::join_vector(nums));

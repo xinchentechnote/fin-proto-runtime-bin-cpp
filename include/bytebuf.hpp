@@ -15,14 +15,14 @@ class ByteBuf {
     buffer_.reserve(capacity);
   }
 
-  void write_u8(uint8_t val) { buffer_.push_back(val); }
+  void write_u8(uint8_t val) { buffer_.push_back(val); writer_index_ += 1; }
   void write_u8_at(size_t pos, uint8_t val) { write_at(pos, val); }
   uint8_t read_u8() {
     check_read(1);
     return buffer_[reader_index_++];
   }
 
-  void write_u8_le(uint8_t val) { buffer_.push_back(val); }
+  void write_u8_le(uint8_t val) { buffer_.push_back(val); writer_index_ += 1; }
   void write_u8_le_at(size_t pos, uint8_t val) { write_le_at(pos, val); }
   uint8_t read_u8_le() {
     check_read(1);
@@ -71,14 +71,14 @@ class ByteBuf {
     return read_le<uint64_t>();
   }
 
-  void write_i8(int8_t val) { buffer_.push_back(static_cast<uint8_t>(val)); }
+  void write_i8(int8_t val) { buffer_.push_back(static_cast<uint8_t>(val)); writer_index_ += 1; }
   void write_i8_at(size_t pos, int8_t val) { write_at(pos, val); }
   int8_t read_i8() {
     check_read(1);
     return static_cast<int8_t>(buffer_[reader_index_++]);
   }
 
-  void write_i8_le(int8_t val) { buffer_.push_back(static_cast<uint8_t>(val)); }
+  void write_i8_le(int8_t val) { buffer_.push_back(static_cast<uint8_t>(val)); writer_index_ += 1; }
   void write_i8_le_at(size_t pos, int8_t val) { write_le_at(pos, val); }
   int8_t read_i8_le() {
     check_read(1);
@@ -154,6 +154,7 @@ class ByteBuf {
   void write_bytes(const void* data, size_t len) {
     const uint8_t* bytes = static_cast<const uint8_t*>(data);
     buffer_.insert(buffer_.end(), bytes, bytes + len);
+    writer_index_ += len;
   }
   void read_bytes(void* dest, size_t len) {
     check_read(len);
