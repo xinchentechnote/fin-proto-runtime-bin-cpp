@@ -16,6 +16,19 @@ TEST(CodecTest, PutAndGetStringLE) {
   EXPECT_EQ(output, input);
 }
 
+std::string vectorToHexString(const std::vector<uint8_t>& buffer) {
+  std::stringstream ss;
+  ss << std::hex << std::setfill('0');
+
+  for (size_t i = 0; i < buffer.size(); ++i) {
+    ss << std::setw(2) << static_cast<int>(buffer[i]);
+    if (i < buffer.size() - 1) {
+      ss << " ";  // 可选：添加空格分隔
+    }
+  }
+  return ss.str();
+}
+
 TEST(CodecTest, PutAndGetFixedString) {
   ByteBuf buf;
   std::string input = "hi";

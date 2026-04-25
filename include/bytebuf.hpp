@@ -299,9 +299,9 @@ class ByteBuf {
     }
   }
 
-  // 通用写入函数，默认小端序
+  // 通用写入函数，默认大端序
   template <typename T>
-  void write(T value, bool big_endian = false) {
+  void write(T value, bool big_endian = true) {
     if (big_endian) {
       write_be(value);
     } else {
@@ -309,7 +309,7 @@ class ByteBuf {
     }
   }
   template <typename T>
-  void write_at(size_t pos, T value, bool big_endian = false) {
+  void write_at(size_t pos, T value, bool big_endian = true) {
     if (big_endian) {
       write_be_at(pos, value);
     } else {
@@ -317,9 +317,9 @@ class ByteBuf {
     }
   }
 
-  // 通用读取函数，默认小端序
+  // 通用读取函数，默认大端序
   template <typename T>
-  T read(bool big_endian = false) {
+  T read(bool big_endian = true) {
     if (big_endian) {
       return read_be<T>();
     } else {
